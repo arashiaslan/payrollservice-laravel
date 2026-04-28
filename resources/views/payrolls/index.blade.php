@@ -106,19 +106,19 @@
                         </a>
                     </div>
 
-                    {{-- Tabel --}}
-                    <div class="overflow-x-auto">
+                    {{-- Tampilan Desktop (Tabel) --}}
+                    <div class="hidden md:block overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 text-sm">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-50 uppercase tracking-wider text-xs">
                                 <tr>
-                                    <th class="px-4 py-3 text-left font-semibold text-gray-600 w-10">No</th>
-                                    <th class="px-4 py-3 text-left font-semibold text-gray-600">Nama Pegawai</th>
-                                    <th class="px-4 py-3 text-left font-semibold text-gray-600">Jabatan</th>
-                                    <th class="px-4 py-3 text-right font-semibold text-gray-600">Gaji Pokok</th>
-                                    <th class="px-4 py-3 text-right font-semibold text-gray-600">Tunjangan</th>
-                                    <th class="px-4 py-3 text-right font-semibold text-gray-600">Potongan</th>
-                                    <th class="px-4 py-3 text-right font-semibold text-gray-600">Gaji Bersih</th>
-                                    <th class="px-4 py-3 text-center font-semibold text-gray-600">Aksi</th>
+                                    <th class="px-4 py-3 text-left font-semibold text-gray-500 w-10">No</th>
+                                    <th class="px-4 py-3 text-left font-semibold text-gray-500">Nama Pegawai</th>
+                                    <th class="px-4 py-3 text-left font-semibold text-gray-500">Jabatan</th>
+                                    <th class="px-4 py-3 text-right font-semibold text-gray-500">Gaji Pokok</th>
+                                    <th class="px-4 py-3 text-right font-semibold text-gray-500">Tunjangan</th>
+                                    <th class="px-4 py-3 text-right font-semibold text-gray-500">Potongan</th>
+                                    <th class="px-4 py-3 text-right font-semibold text-gray-500">Gaji Bersih</th>
+                                    <th class="px-4 py-3 text-center font-semibold text-gray-500">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 bg-white">
@@ -127,40 +127,24 @@
                                         <td class="px-4 py-3 text-gray-500">{{ $index + 1 }}</td>
                                         <td class="px-4 py-3 font-medium text-gray-800">{{ $p->employee->user->name }}</td>
                                         <td class="px-4 py-3 text-gray-600">{{ $p->employee->jabatan }}</td>
-                                        <td class="px-4 py-3 text-right text-gray-700 tabular-nums">
-                                            {{ \App\Models\Payroll::formatRupiah($p->employee->gaji_pokok) }}
-                                        </td>
-                                        <td class="px-4 py-3 text-right text-gray-700 tabular-nums">
-                                            {{ \App\Models\Payroll::formatRupiah($p->total_tunjangan) }}
-                                        </td>
+                                        <td class="px-4 py-3 text-right text-gray-700 tabular-nums">{{ \App\Models\Payroll::formatRupiah($p->employee->gaji_pokok) }}</td>
+                                        <td class="px-4 py-3 text-right text-gray-700 tabular-nums">{{ \App\Models\Payroll::formatRupiah($p->total_tunjangan) }}</td>
                                         <td class="px-4 py-3 text-right tabular-nums">
                                             @if ($p->total_potongan > 0)
-                                                <span class="text-red-600 font-medium">
-                                                    - {{ \App\Models\Payroll::formatRupiah($p->total_potongan) }}
-                                                </span>
+                                                <span class="text-red-600 font-medium">- {{ \App\Models\Payroll::formatRupiah($p->total_potongan) }}</span>
                                             @else
                                                 <span class="text-gray-400">{{ \App\Models\Payroll::formatRupiah(0) }}</span>
                                             @endif
                                         </td>
                                         <td class="px-4 py-3 text-right tabular-nums">
-                                            <span class="font-bold text-green-700">
-                                                {{ \App\Models\Payroll::formatRupiah($p->gaji_bersih) }}
-                                            </span>
+                                            <span class="font-bold text-green-700">{{ \App\Models\Payroll::formatRupiah($p->gaji_bersih) }}</span>
                                         </td>
                                         <td class="px-4 py-3">
                                             <div class="flex items-center justify-center gap-2">
-                                                <a href="{{ route('payrolls.show', $p) }}"
-                                                   class="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-medium rounded transition whitespace-nowrap">
-                                                    Lihat Detail
-                                                </a>
-                                                <form action="{{ route('payrolls.destroy', $p) }}" method="POST"
-                                                      onsubmit="return confirm('Yakin hapus slip gaji {{ $p->employee->user->name }} periode {{ \App\Models\Payroll::getNamaBulan($p->bulan) }} {{ $p->tahun }}?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                            class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 text-xs font-medium rounded transition">
-                                                        Hapus
-                                                    </button>
+                                                <a href="{{ route('payrolls.show', $p) }}" class="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-medium rounded transition whitespace-nowrap">Detail</a>
+                                                <form action="{{ route('payrolls.destroy', $p) }}" method="POST" onsubmit="return confirm('Yakin hapus slip gaji {{ $p->employee->user->name }} periode {{ \App\Models\Payroll::getNamaBulan($p->bulan) }} {{ $p->tahun }}?')">
+                                                    @csrf @method('DELETE')
+                                                    <button type="submit" class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-700 text-xs font-medium rounded transition">Hapus</button>
                                                 </form>
                                             </div>
                                         </td>
@@ -169,20 +153,63 @@
                                     <tr>
                                         <td colspan="8" class="px-4 py-14 text-center">
                                             <div class="flex flex-col items-center gap-2 text-gray-400">
-                                                <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                                </svg>
+                                                <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
                                                 <p class="text-sm italic">Belum ada data payroll untuk periode ini.</p>
-                                                <a href="{{ route('payrolls.create') }}"
-                                                   class="mt-1 text-sm text-indigo-600 hover:text-indigo-800 font-medium underline underline-offset-2 transition">
-                                                    Generate payroll sekarang
-                                                </a>
+                                                <a href="{{ route('payrolls.create') }}" class="mt-1 text-sm text-indigo-600 hover:text-indigo-800 font-medium underline underline-offset-2 transition">Generate payroll sekarang</a>
                                             </div>
                                         </td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+
+                    {{-- Tampilan Mobile (Cards) --}}
+                    <div class="block md:hidden border-t border-gray-200 divide-y divide-gray-100">
+                        @forelse ($payrolls as $p)
+                            <div class="p-4 bg-white flex flex-col gap-3">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="font-semibold text-gray-800">{{ $p->employee->user->name }}</p>
+                                        <p class="text-xs text-gray-500">{{ $p->employee->jabatan }}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-xs font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded">{{ \App\Models\Payroll::formatRupiah($p->gaji_bersih) }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-2 text-xs border border-gray-100 rounded-lg p-2 bg-gray-50">
+                                    <div>
+                                        <span class="text-gray-500 block">Gaji Pokok</span>
+                                        <span class="font-medium text-gray-700">{{ \App\Models\Payroll::formatRupiah($p->employee->gaji_pokok) }}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-gray-500 block">Tunjangan</span>
+                                        <span class="font-medium text-gray-700">{{ \App\Models\Payroll::formatRupiah($p->total_tunjangan) }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500 block">Potongan</span>
+                                        <span class="font-medium text-red-600">- {{ \App\Models\Payroll::formatRupiah($p->total_potongan) }}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-gray-500 block">Gaji Bersih</span>
+                                        <span class="font-bold text-green-700">{{ \App\Models\Payroll::formatRupiah($p->gaji_bersih) }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-2 justify-end mt-1">
+                                    <a href="{{ route('payrolls.show', $p) }}" class="px-3 py-1.5 bg-blue-50 text-blue-600 border border-blue-200 focus:ring-2 focus:ring-blue-500 text-xs font-medium rounded transition">Lihat Slip</a>
+                                    <form action="{{ route('payrolls.destroy', $p) }}" method="POST" onsubmit="return confirm('Yakin hapus data ini?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 focus:ring-2 focus:ring-red-500 text-xs font-medium rounded transition">Hapus</button>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="p-8 text-center">
+                                <p class="text-sm italic text-gray-400">Belum ada data payroll.</p>
+                            </div>
+                        @endforelse
                     </div>
 
                     {{-- Footer: ringkasan total --}}
@@ -197,6 +224,13 @@
                                     {{ \App\Models\Payroll::formatRupiah($payrolls->sum('gaji_bersih')) }}
                                 </span>
                             </p>
+                        </div>
+                    @endif
+
+                    {{-- Pagination --}}
+                    @if ($payrolls instanceof \Illuminate\Pagination\LengthAwarePaginator && $payrolls->hasPages())
+                        <div class="px-6 py-4 border-t border-gray-200">
+                            {{ $payrolls->links() }}
                         </div>
                     @endif
 
@@ -232,74 +266,44 @@
                         <p class="text-sm text-gray-500 mt-0.5">Semua slip gaji yang telah digenerate untuk Anda.</p>
                     </div>
 
-                    <div class="overflow-x-auto">
+                    {{-- Tampilan Desktop (Tabel) --}}
+                    <div class="hidden md:block overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 text-sm">
-                            <thead class="bg-gray-50">
+                            <thead class="bg-gray-50 uppercase tracking-wider text-xs">
                                 <tr>
-                                    <th class="px-4 py-3 text-left font-semibold text-gray-600 w-10">No</th>
-                                    <th class="px-4 py-3 text-left font-semibold text-gray-600">Periode</th>
-                                    <th class="px-4 py-3 text-right font-semibold text-gray-600">Gaji Pokok</th>
-                                    <th class="px-4 py-3 text-right font-semibold text-gray-600">Tunjangan</th>
-                                    <th class="px-4 py-3 text-right font-semibold text-gray-600">Potongan</th>
-                                    <th class="px-4 py-3 text-right font-semibold text-gray-600">Gaji Bersih</th>
-                                    <th class="px-4 py-3 text-center font-semibold text-gray-600">Aksi</th>
+                                    <th class="px-4 py-3 text-left font-semibold text-gray-500 w-10">No</th>
+                                    <th class="px-4 py-3 text-left font-semibold text-gray-500">Periode</th>
+                                    <th class="px-4 py-3 text-right font-semibold text-gray-500">Gaji Pokok</th>
+                                    <th class="px-4 py-3 text-right font-semibold text-gray-500">Tunjangan</th>
+                                    <th class="px-4 py-3 text-right font-semibold text-gray-500">Potongan</th>
+                                    <th class="px-4 py-3 text-right font-semibold text-gray-500">Gaji Bersih</th>
+                                    <th class="px-4 py-3 text-center font-semibold text-gray-500">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 bg-white">
                                 @forelse ($payrolls as $index => $p)
                                     <tr class="hover:bg-gray-50 transition">
                                         <td class="px-4 py-3 text-gray-500">{{ $index + 1 }}</td>
-
-                                        {{-- Periode: Bulan + Tahun --}}
-                                        <td class="px-4 py-3">
-                                            <span class="font-medium text-gray-800">
-                                                {{ \App\Models\Payroll::getNamaBulan($p->bulan) }} {{ $p->tahun }}
-                                            </span>
-                                        </td>
-
-                                        {{-- Gaji Pokok --}}
-                                        <td class="px-4 py-3 text-right text-gray-700 tabular-nums">
-                                            {{ \App\Models\Payroll::formatRupiah($p->employee->gaji_pokok) }}
-                                        </td>
-
-                                        {{-- Tunjangan --}}
-                                        <td class="px-4 py-3 text-right text-gray-700 tabular-nums">
-                                            {{ \App\Models\Payroll::formatRupiah($p->total_tunjangan) }}
-                                        </td>
-
-                                        {{-- Potongan --}}
+                                        <td class="px-4 py-3 font-medium text-gray-800">{{ \App\Models\Payroll::getNamaBulan($p->bulan) }} {{ $p->tahun }}</td>
+                                        <td class="px-4 py-3 text-right text-gray-700 tabular-nums">{{ \App\Models\Payroll::formatRupiah($p->employee->gaji_pokok) }}</td>
+                                        <td class="px-4 py-3 text-right text-gray-700 tabular-nums">{{ \App\Models\Payroll::formatRupiah($p->total_tunjangan) }}</td>
                                         <td class="px-4 py-3 text-right tabular-nums">
                                             @if ($p->total_potongan > 0)
-                                                <span class="text-red-600 font-medium">
-                                                    - {{ \App\Models\Payroll::formatRupiah($p->total_potongan) }}
-                                                </span>
+                                                <span class="text-red-600 font-medium">- {{ \App\Models\Payroll::formatRupiah($p->total_potongan) }}</span>
                                             @else
                                                 <span class="text-gray-400">{{ \App\Models\Payroll::formatRupiah(0) }}</span>
                                             @endif
                                         </td>
-
-                                        {{-- Gaji Bersih --}}
-                                        <td class="px-4 py-3 text-right tabular-nums">
-                                            <span class="font-bold text-green-700">
-                                                {{ \App\Models\Payroll::formatRupiah($p->gaji_bersih) }}
-                                            </span>
-                                        </td>
-
-                                        {{-- Aksi --}}
+                                        <td class="px-4 py-3 text-right tabular-nums"><span class="font-bold text-green-700">{{ \App\Models\Payroll::formatRupiah($p->gaji_bersih) }}</span></td>
                                         <td class="px-4 py-3 text-center">
-                                            <a href="{{ route('payrolls.show', $p) }}"
-                                               class="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-medium rounded transition whitespace-nowrap">
-                                                Lihat Detail
-                                            </a>
+                                            <a href="{{ route('payrolls.show', $p) }}" class="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-medium rounded transition whitespace-nowrap">Detail</a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
                                         <td colspan="7" class="px-4 py-14 text-center">
                                             <div class="flex flex-col items-center gap-2 text-gray-400">
-                                                <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                                </svg>
+                                                <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
                                                 <p class="text-sm italic">Belum ada slip gaji yang digenerate untuk Anda.</p>
                                                 <p class="text-xs text-gray-300">Hubungi admin jika ada pertanyaan.</p>
                                             </div>
@@ -308,6 +312,41 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+
+                    {{-- Tampilan Mobile (Cards) --}}
+                    <div class="block md:hidden border-t border-gray-200 divide-y divide-gray-100">
+                        @forelse ($payrolls as $p)
+                            <div class="p-4 bg-white flex flex-col gap-3">
+                                <div class="flex justify-between items-center">
+                                    <p class="font-semibold text-gray-800 text-base">{{ \App\Models\Payroll::getNamaBulan($p->bulan) }} {{ $p->tahun }}</p>
+                                    <span class="font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded text-sm">{{ \App\Models\Payroll::formatRupiah($p->gaji_bersih) }}</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 text-xs border border-gray-100 rounded-lg p-2 bg-gray-50">
+                                    <div>
+                                        <span class="text-gray-500 block">Gaji Pokok</span>
+                                        <span class="font-medium text-gray-700">{{ \App\Models\Payroll::formatRupiah($p->employee->gaji_pokok) }}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-gray-500 block">Tunjangan</span>
+                                        <span class="font-medium text-gray-700">{{ \App\Models\Payroll::formatRupiah($p->total_tunjangan) }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-500 block">Potongan</span>
+                                        <span class="font-medium text-red-600">- {{ \App\Models\Payroll::formatRupiah($p->total_potongan) }}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-gray-500 block">Status</span>
+                                        <span class="font-medium text-gray-700">Lunas</span>
+                                    </div>
+                                </div>
+                                <a href="{{ route('payrolls.show', $p) }}" class="block w-full text-center px-4 py-2 mt-1 bg-blue-50 text-blue-600 border border-blue-200 focus:ring-2 focus:ring-blue-500 text-xs font-medium rounded transition">Lihat Slip Detail</a>
+                            </div>
+                        @empty
+                            <div class="p-8 text-center">
+                                <p class="text-sm italic text-gray-400">Belum ada slip gaji.</p>
+                            </div>
+                        @endforelse
                     </div>
 
                     {{-- Footer ringkasan --}}
@@ -322,6 +361,13 @@
                                     {{ \App\Models\Payroll::formatRupiah($payrolls->sum('gaji_bersih')) }}
                                 </span>
                             </p>
+                        </div>
+                    @endif
+
+                    {{-- Pagination --}}
+                    @if ($payrolls instanceof \Illuminate\Pagination\LengthAwarePaginator && $payrolls->hasPages())
+                        <div class="px-6 py-4 border-t border-gray-200">
+                            {{ $payrolls->links() }}
                         </div>
                     @endif
 

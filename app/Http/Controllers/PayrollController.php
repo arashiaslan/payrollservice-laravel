@@ -28,7 +28,8 @@ class PayrollController extends Controller
                 ->where("bulan", $bulan)
                 ->where("tahun", $tahun)
                 ->latest()
-                ->get();
+                ->paginate(15)
+                ->withQueryString();
 
             return view(
                 "payrolls.index",
@@ -45,7 +46,8 @@ class PayrollController extends Controller
                 ->where("employee_id", $employee->id)
                 ->orderByDesc("tahun")
                 ->orderByDesc("bulan")
-                ->get();
+                ->paginate(15)
+                ->withQueryString();
 
             // Kirim ke view dengan flag isPegawai=true, bulan & tahun null (tidak ada filter)
             return view("payrolls.index", [

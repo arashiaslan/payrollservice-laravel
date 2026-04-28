@@ -138,7 +138,8 @@
                             </a>
                         </div>
                     @else
-                        <div class="overflow-x-auto">
+                        {{-- Tampilan Desktop (Tabel) --}}
+                        <div class="hidden md:block overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 text-sm">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -150,35 +151,42 @@
                                 <tbody class="bg-white divide-y divide-gray-100">
                                     @foreach($absensiTerbaru as $absen)
                                         <tr class="hover:bg-gray-50">
-                                            {{-- Nama pegawai dari relasi employee -> user --}}
-                                            <td class="px-4 py-3 font-medium text-gray-800">
-                                                {{ $absen->employee->user->name ?? '-' }}
-                                            </td>
-                                            {{-- Tanggal format: 28/04/2026 --}}
-                                            <td class="px-4 py-3 text-gray-500">
-                                                {{ $absen->tanggal->format('d/m/Y') }}
-                                            </td>
-                                            {{-- Badge status dengan warna berbeda --}}
+                                            <td class="px-4 py-3 font-medium text-gray-800">{{ $absen->employee->user->name ?? '-' }}</td>
+                                            <td class="px-4 py-3 text-gray-500">{{ $absen->tanggal->format('d/m/Y') }}</td>
                                             <td class="px-4 py-3">
                                                 @if($absen->status === 'Hadir')
-                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                                                        Hadir
-                                                    </span>
+                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Hadir</span>
                                                 @elseif($absen->status === 'Izin')
-                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                                                        Izin
-                                                    </span>
+                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Izin</span>
                                                 @else
-                                                    {{-- Status Alpa --}}
-                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-                                                        Alpa
-                                                    </span>
+                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">Alpa</span>
                                                 @endif
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+
+                        {{-- Tampilan Mobile (List) --}}
+                        <div class="block md:hidden border-t border-gray-200 divide-y divide-gray-100">
+                            @foreach($absensiTerbaru as $absen)
+                                <div class="px-4 py-3 bg-white flex justify-between items-center">
+                                    <div>
+                                        <p class="font-medium text-gray-800 text-sm">{{ $absen->employee->user->name ?? '-' }}</p>
+                                        <p class="text-xs text-gray-500">{{ $absen->tanggal->format('d/m/Y') }}</p>
+                                    </div>
+                                    <div>
+                                        @if($absen->status === 'Hadir')
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Hadir</span>
+                                        @elseif($absen->status === 'Izin')
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Izin</span>
+                                        @else
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">Alpa</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     @endif
                 </div>
@@ -370,7 +378,8 @@
                             <p class="text-sm">Belum ada data absensi.</p>
                         </div>
                     @else
-                        <div class="overflow-x-auto">
+                        {{-- Tampilan Desktop (Tabel) --}}
+                        <div class="hidden md:block overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200 text-sm">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -381,31 +390,38 @@
                                 <tbody class="bg-white divide-y divide-gray-100">
                                     @foreach($recentAttendances as $absen)
                                         <tr class="hover:bg-gray-50">
-                                            {{-- Tanggal format: 28/04/2026 --}}
-                                            <td class="px-4 py-3 text-gray-600">
-                                                {{ $absen->tanggal->format('d/m/Y') }}
-                                            </td>
-                                            {{-- Badge status dengan warna sesuai --}}
+                                            <td class="px-4 py-3 text-gray-600">{{ $absen->tanggal->format('d/m/Y') }}</td>
                                             <td class="px-4 py-3">
                                                 @if($absen->status === 'Hadir')
-                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                                                        Hadir
-                                                    </span>
+                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Hadir</span>
                                                 @elseif($absen->status === 'Izin')
-                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                                                        Izin
-                                                    </span>
+                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Izin</span>
                                                 @else
-                                                    {{-- Status Alpa --}}
-                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-                                                        Alpa
-                                                    </span>
+                                                    <span class="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">Alpa</span>
                                                 @endif
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+
+                        {{-- Tampilan Mobile (List) --}}
+                        <div class="block md:hidden border-t border-gray-200 divide-y divide-gray-100">
+                            @foreach($recentAttendances as $absen)
+                                <div class="px-4 py-3 bg-white flex justify-between items-center">
+                                    <p class="font-medium text-gray-800 text-sm">{{ $absen->tanggal->format('d F Y') }}</p>
+                                    <div>
+                                        @if($absen->status === 'Hadir')
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Hadir</span>
+                                        @elseif($absen->status === 'Izin')
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Izin</span>
+                                        @else
+                                            <span class="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">Alpa</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     @endif
                 </div>

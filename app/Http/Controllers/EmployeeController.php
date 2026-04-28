@@ -16,8 +16,8 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        // Ambil semua data pegawai beserta data user-nya, urutkan dari terbaru
-        $employees = Employee::with("user")->latest()->get();
+        // Ambil semua data pegawai beserta data user-nya, urutkan dari terbaru, dan batasi 10 per halaman
+        $employees = Employee::with("user")->latest()->paginate(10);
 
         return view("employees.index", compact("employees"));
     }

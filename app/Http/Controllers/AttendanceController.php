@@ -20,33 +20,60 @@ class AttendanceController extends Controller
         $bulan = $request->get("bulan");
         $tahun = $request->get("tahun", date("Y")); // Default: tahun sekarang
 
-        // Mulai query dengan eager loading relasi 'employee' dan 'user'
+        // ============================================
+        // 1. QUERY UNTUK TABEL ABSENSI (TAB 2)
+        // ============================================
         $query = Attendance::with("employee.user")->latest("tanggal");
 
-        // Terapkan filter pegawai jika dipilih
         if ($employeeId) {
             $query->where("employee_id", $employeeId);
         }
-
-        // Terapkan filter bulan jika dipilih
         if ($bulan) {
             $query->whereMonth("tanggal", $bulan);
         }
-
-        // Terapkan filter tahun (selalu aktif, default tahun ini)
         if ($tahun) {
             $query->whereYear("tanggal", $tahun);
         }
 
-        // Ambil hasil query (sudah difilter)
-        $attendances = $query->get();
+        // Ambil hasil query dibatasi 15 per halaman
+        $attendances = $query->paginate(15)->withQueryString();
 
-        // Ambil semua pegawai untuk dropdown filter di view
+        // ============================================
+        // 2. QUERY UNTUK REKAP KARYAWAN (TAB 1)
+        // ============================================
+        $employeesStats = Employee::with("user")
+            ->withCount([
+                'attendances as hadir_count' => function ($q) use ($bulan, $tahun) {
+                    $q->where('status', 'Hadir');
+                    if ($bulan) $q->whereMonth('tanggal', $bulan);
+                    if ($tahun) $q->whereYear('tanggal', $tahun);
+                },
+                'attendances as izin_count' => function ($q) use ($bulan, $tahun) {
+                    $q->where('status', 'Izin');
+                    if ($bulan) $q->whereMonth('tanggal', $bulan);
+                    if ($tahun) $q->whereYear('tanggal', $tahun);
+                },
+                'attendances as alpa_count' => function ($q) use ($bulan, $tahun) {
+                    $q->where('status', 'Alpa');
+                    if ($bulan) $q->whereMonth('tanggal', $bulan);
+                    if ($tahun) $q->whereYear('tanggal', $tahun);
+                }
+            ]);
+            
+        // Jika filter pegawai dipilih, kartu yang tampil hanya milik pegawai tersebut
+        if ($employeeId) {
+            $employeesStats->where('id', $employeeId);
+        }
+        $employeesStats = $employeesStats->get();
+
+        // ============================================
+        // 3. DAFTAR PEGAWAI UNTUK DROPDOWN FILTER
+        // ============================================
         $employees = Employee::with("user")->orderBy("id")->get();
 
         return view(
             "attendances.index",
-            compact("attendances", "employees", "employeeId", "bulan", "tahun"),
+            compact("attendances", "employeesStats", "employees", "employeeId", "bulan", "tahun"),
         );
     }
 
